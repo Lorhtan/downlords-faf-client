@@ -27,16 +27,17 @@ public class MapPreviewServiceTest {
   private AssetService assetService;
   @Mock
   private UiService uiService;
-  @Mock
   private ClientProperties clientProperties;
 
   @Before
   public void setUp() throws Exception {
+    clientProperties = new ClientProperties();
     instance = new MapPreviewService(assetService, uiService, clientProperties);
   }
 
   @Test
   public void testLoadPreview() {
+    clientProperties.getVault().setMapPreviewUrlFormat("http://example.com/%s");
     for (PreviewSize previewSize : PreviewSize.values()) {
       Path cacheSubDir = Paths.get("maps").resolve(previewSize.folderName);
       instance.loadPreview("preview", previewSize);

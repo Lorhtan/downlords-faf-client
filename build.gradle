@@ -47,9 +47,12 @@ allprojects {
     maven { url 'https://maven.ej-technologies.com/repository' }
     maven { url "http://dl.bintray.com/typesafe/maven-releases" }
     maven { url "http://maven.teamdev.com/repository/products" }
+    maven { url  "https://dl.bintray.com/supcomhub/maven-public" }
   }
 
   apply plugin: 'java'
+  apply plugin: 'idea'
+  idea.module.outputDir file("out/production/classes")
 
   group = 'org.supcomhub.client'
   // Version has to be passed at build time from command line
@@ -177,7 +180,7 @@ install4j {
   }
 }
 
-println "Platform is: ${javafxPlatform}"
+println "Building for JavaFX platform: ${javafxPlatform}"
 task buildInstall4jMediaFiles(type: Install4jTask) {
   group "distribution"
   description 'Creates install4j media files'
@@ -248,10 +251,6 @@ task downloadWindowsUid(type: Download) {
 
 task downloadNativeDependencies(dependsOn: [unpackIceAdapter, downloadUnixUid, downloadWindowsUid, unpackIceAdapterLinux]) {
   group "native dependencies"
-}
-
-task wrapper(type: Wrapper) {
-  gradleVersion = '4.5.1'
 }
 
 task sendCoverageToCodacy(type: JavaExec, dependsOn: jacocoTestReport) {

@@ -1,6 +1,6 @@
-faf-client:
+sh-client:
   server:
-    host: localhost
+    web-socket-url: wss://localhost:8012/ws
 
   irc:
     host: localhost

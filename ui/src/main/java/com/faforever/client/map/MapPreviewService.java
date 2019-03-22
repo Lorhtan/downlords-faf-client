@@ -26,14 +26,12 @@ public class MapPreviewService {
 
   private final AssetService assetService;
   private final UiService uiService;
-  private final String mapPreviewUrlFormat;
+  private final ClientProperties clientProperties;
 
   public MapPreviewService(AssetService assetService, UiService uiService, ClientProperties clientProperties) {
     this.assetService = assetService;
     this.uiService = uiService;
-
-    Vault vault = clientProperties.getVault();
-    this.mapPreviewUrlFormat = vault.getMapPreviewUrlFormat();
+    this.clientProperties = clientProperties;
   }
 
   private static URL getPreviewUrl(String mapName, String baseUrl, PreviewSize previewSize) {
@@ -67,6 +65,7 @@ public class MapPreviewService {
 
   @Cacheable(value = CacheNames.MAP_PREVIEW, unless = "#result == null")
   public Image loadPreview(String mapName, PreviewSize previewSize) {
+    String mapPreviewUrlFormat = clientProperties.getVault().getMapPreviewUrlFormat();
     return loadPreview(getPreviewUrl(mapName, mapPreviewUrlFormat, previewSize), previewSize);
   }
 }

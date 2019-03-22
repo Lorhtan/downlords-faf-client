@@ -208,7 +208,7 @@ public class Ladder1v1Controller extends AbstractViewController<Node> {
   }
 
   private void updateRating(Player player) {
-    int rank = player.getRating().get(KnownFeaturedMod.LADDER_1V1.getTechnicalName());
+    int rank = player.getRating().getOrDefault(KnownFeaturedMod.LADDER_1V1.getTechnicalName(), 0);
 
     if (rank == 0) {
       // FIXME make this configurable, or better, read from server once available

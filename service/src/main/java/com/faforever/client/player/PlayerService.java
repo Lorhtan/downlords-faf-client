@@ -111,7 +111,7 @@ public class PlayerService implements InitializingBean {
 
   @Subscribe
   public void onLoginSuccess(LoginSuccessEvent event) {
-    Player player = createAndGetPlayerForUsername(event.getUsername());
+    Player player = createAndGetPlayerForUsername(event.getDisplayName());
     player.setId(event.getUserId());
     currentPlayer.set(player);
     player.setIdleSince(Instant.now());
@@ -293,7 +293,7 @@ public class PlayerService implements InitializingBean {
     Player player;
     if (Objects.equals(playerInfo.getId(), userService.getUserId())) {
       player = getCurrentPlayer().orElseThrow(() -> new IllegalStateException("Player has not been set"));
-      player.updateFrom(playerInfo);
+      updatePlayer(player, playerInfo);
       player.setSocialStatus(SELF);
     } else {
       player = createAndGetPlayerForUsername(playerInfo.getDisplayName());
@@ -306,11 +306,24 @@ public class PlayerService implements InitializingBean {
         player.setSocialStatus(OTHER);
       }
 
-      player.updateFrom(playerInfo);
+      updatePlayer(player, playerInfo);
 
       eventBus.post(new PlayerOnlineEvent(player));
     }
 
     eventPublisher.publishEvent(new PlayerUpdatedEvent(player));
+  }
+
+  // TODO can we use mapstruct for this?
+  private void updatePlayer(Player player, PlayerServerMessage message) {
+    player.setId(message.getId());
+    player.setClanTag(message.getClanTag());
+    player.setCountry(message.getCountry());
+
+    player.setNumberOfGames(message.getNumberOfGames());
+    if (message.getAvatar() != null) {
+      player.setAvatarUrl(message.getAvatar().getUrl());
+      player.setAvatarTooltip(message.getAvatar().getDescription());
+    }
   }
 }

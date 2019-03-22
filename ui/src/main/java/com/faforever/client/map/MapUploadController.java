@@ -28,7 +28,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import org.supcomhub.api.dto.ApiException;
 
 import java.lang.invoke.MethodHandles;
 import java.nio.file.Path;
@@ -150,7 +149,7 @@ public class MapUploadController implements Controller<Node> {
 
   private void onUploadFailed(Throwable throwable) {
     enterMapInfoState();
-    if (throwable instanceof ApiException) {
+    if (throwable instanceof MapUploadFailedException) {
       notificationService.addNotification(new ImmediateNotification(
           i18n.get("errorTitle"), i18n.get("mapVault.upload.failed", throwable.getLocalizedMessage()), Severity.ERROR,
           asList(

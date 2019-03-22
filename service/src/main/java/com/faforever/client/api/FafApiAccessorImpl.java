@@ -85,6 +85,7 @@ public class FafApiAccessorImpl implements FafApiAccessor, InitializingBean {
   private static final String TOURNAMENT_LIST_ENDPOINT = "/challonge/v1/tournaments.json";
   private static final String REPLAY_INCLUDES = "featuredMod,playerStats,playerStats.player,reviews,reviews.player,mapVersion,mapVersion.map,mapVersion.reviews,reviewsSummary";
   private static final String COOP_RESULT_INCLUDES = "game.playerStats.player";
+  private static final String COOP_MISSION_INCLUDES = "map";
   private static final String PLAYER_INCLUDES = "globalRating,ladder1v1Rating,names";
   private static final String MOD_ENDPOINT = "/data/mod";
   private static final String OAUTH_TOKEN_PATH = "/oauth/token";
@@ -499,7 +500,9 @@ public class FafApiAccessorImpl implements FafApiAccessor, InitializingBean {
   @Override
   @Cacheable(CacheNames.COOP_MAPS)
   public List<CoopMission> getCoopMissions() {
-    return this.getAll("/data/coopMission");
+    return this.getAll("/data/coopMission", ImmutableMap.of(
+      "include", COOP_MISSION_INCLUDES
+    ));
   }
 
   @Override

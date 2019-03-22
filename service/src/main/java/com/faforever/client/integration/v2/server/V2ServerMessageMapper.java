@@ -20,6 +20,9 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.supcomhub.server.protocol.v2.dto.server.V2GpgServerMessage;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 @Mapper(componentModel = "spring")
 public interface V2ServerMessageMapper {
 
@@ -56,4 +59,16 @@ public interface V2ServerMessageMapper {
   GameResultMessage map(org.supcomhub.server.protocol.v2.dto.server.GameResultMessage source);
 
   ErrorServerMessage map(org.supcomhub.server.protocol.v2.dto.server.ErrorServerMessage source);
+
+  default URL map(String url) {
+    try {
+      return new URL(url);
+    } catch (MalformedURLException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  default String map(URL url) {
+    return url.toExternalForm();
+  }
 }

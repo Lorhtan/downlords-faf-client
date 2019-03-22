@@ -1,22 +1,23 @@
 package com.faforever.client.integration;
 
-import com.faforever.client.remote.ClientMessage;
-import com.faforever.client.remote.ServerMessage;
+import lombok.experimental.UtilityClass;
 
 /**
  * Holds the names of all channel. A channel's name is also the name of its bean. Channels can be configured in {@link
  * com.faforever.client.config.integration.ChannelConfiguration}.
  */
-public final class ChannelNames {
+@UtilityClass
+public class ChannelNames {
 
   /**
-   * Channel for single-recipient outbound client messages. The payload of messages in this channel is {@link
-   * ServerMessage}.
+   * Channel for messages sent from the client to the server. The payload of messages in this channel is {@link
+   * com.faforever.client.remote.ClientMessage}.
    */
   public static final String SERVER_OUTBOUND = "serverOutbound";
 
   /**
-   * Channel for inbound server messages. The payload of messages in this channel is {@link ClientMessage}.
+   * Channel for messages sent from the server to the client. The payload of messages in this channel is {@link
+   * com.faforever.client.remote.ServerMessage}.
    */
   public static final String SERVER_INBOUND = "serverInbound";
 
@@ -42,4 +43,14 @@ public final class ChannelNames {
    */
   public static final String WEB_SOCKET_OUTBOUND = "webSocketOutbound";
 
+  /** Channel to receive {@link com.faforever.client.user.AccountDetailsServerMessage}. */
+  public static final String ACCOUNT_DETAILS = "accountDetailsChannel";
+  /** Channel to receive {@link com.faforever.client.player.PlayersServerMessage}. */
+  public static final String PLAYERS = "playersChannel";
+  /** Channel to receive {@link com.faforever.client.player.PlayerServerMessage}. */
+  public static final String PLAYER = "playerChannel";
+  /** Channel to receive {@link com.faforever.client.game.GameInfosServerMessage}. */
+  public static final String GAMES = "gamesChannel";
+  /** Channel to receive {@link com.faforever.client.chat.ChatChannelsServerMessage}. */
+  public static final String CHAT_CHANNELS = "chatChannelsChannel";
 }

@@ -118,7 +118,7 @@ public class MockFafServerAccessor implements FafServerAccessor {
         PlayersServerMessage playersMessage = new PlayersServerMessage();
         playersMessage.setPlayers(singletonList(playerServerMessage));
 
-        eventBus.post(new LoginSuccessEvent(username, password, playerServerMessage.getId()));
+        eventBus.post(new LoginSuccessEvent(username, username, password, playerServerMessage.getId()));
 
         messageListeners.getOrDefault(playersMessage.getClass(), Collections.emptyList()).forEach(consumer -> consumer.accept(playersMessage));
 

@@ -244,11 +244,6 @@ public class CustomGamesController extends AbstractViewController<Node> {
     gameDetailPane.setVisible(true);
   }
 
-  @VisibleForTesting
-  void setFilteredList(ObservableList<Game> games) {
-    filteredItems = new FilteredList<>(games, s -> true);
-  }
-
   @Override
   protected void onHide() {
     // Hide all games to free up memory

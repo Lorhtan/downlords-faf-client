@@ -17,7 +17,6 @@ import javafx.scene.layout.Pane;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import org.supcomhub.api.dto.ReviewScoreCount;
 
 import java.util.List;
 import java.util.Map;

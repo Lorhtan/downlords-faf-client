@@ -1,6 +1,6 @@
-faf-client:
+sh-client:
   server:
-    host: lobby.faforever.com
+    web-socket-url: wss://server.supcomhub.org/ws
 
   irc:
     host: irc.faforever.com
@@ -18,9 +18,9 @@ faf-client:
     base-url: https://www.faforever.com
 
   api:
-    base-url: https://api.faforever.com
-    client-id: 3bc8282c-7730-11e5-8bcf-feff819cdc9f
-    client-secret: 6035bd78-7730-11e5-8bcf-feff819cdc9f
+    base-url: https://api.supcomhub.org
+    client-id: fa0fc8d2-f89a-404b-86cd-9c746e67b4f5
+    client-secret: 2ef8d9c2-6b74-4195-95f8-09dba7640716
 
   forged-alliance:
     exe-url: http://content.faforever.com/faf/updaterNew/updates_faf_files/ForgedAlliance.exe

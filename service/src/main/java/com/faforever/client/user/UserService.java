@@ -68,7 +68,7 @@ public class UserService implements InitializingBean {
           preferencesService.getPreferences().getLogin().setUsername(displayName);
           preferencesService.storeInBackground();
 
-          eventBus.post(new LoginSuccessEvent(displayName, password, userId));
+          eventBus.post(new LoginSuccessEvent(username, displayName, password, userId));
         })
         .whenComplete((aVoid, throwable) -> {
           if (throwable != null) {

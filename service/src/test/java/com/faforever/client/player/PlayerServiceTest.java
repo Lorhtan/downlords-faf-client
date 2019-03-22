@@ -195,7 +195,7 @@ public class PlayerServiceTest {
 
   @Test
   public void testGetCurrentPlayer() {
-    LoginSuccessEvent event = new LoginSuccessEvent("junit", "", 1);
+    LoginSuccessEvent event = new LoginSuccessEvent("junit", "JUnit", "", 1);
     instance.onLoginSuccess(event);
 
     Player currentPlayer = instance.getCurrentPlayer().orElseThrow(() -> new IllegalStateException("No player returned"));
@@ -207,7 +207,7 @@ public class PlayerServiceTest {
   @Test
   public void testSubscribeAnnotations() {
     assertThat(ReflectionUtils.findMethod(instance.getClass(), "onLoginSuccess", LoginSuccessEvent.class),
-        hasAnnotation(Subscribe.class));
+      hasAnnotation(Subscribe.class));
   }
 
   @Test

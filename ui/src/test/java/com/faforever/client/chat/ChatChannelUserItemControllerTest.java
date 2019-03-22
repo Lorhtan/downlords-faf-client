@@ -74,6 +74,7 @@ public class ChatChannelUserItemControllerTest extends AbstractPlainJavaFxTest {
   private TimeService timeService;
   private ClanTooltipController clanTooltipControllerMock;
   private Clan testClan;
+  private Player clanLeader;
 
   @Before
   public void setUp() throws Exception {
@@ -85,9 +86,18 @@ public class ChatChannelUserItemControllerTest extends AbstractPlainJavaFxTest {
     when(i18n.get(eq("user.status.playing"), any())).thenReturn("Playing");
     when(i18n.get(eq("clan.messageLeader"))).thenReturn("Message clan leader");
     when(i18n.get(eq("clan.visitPage"))).thenReturn("Visit clan website");
+
     testClan = new Clan();
     testClan.setTag("e");
-    testClan.setLeader(new Player("test_player"));
+
+    clanLeader = PlayerBuilder.create("ClanLeader")
+      .defaultValues()
+      .id(222)
+      .clan(testClan.getTag())
+      .get();
+
+    testClan.setLeader(clanLeader);
+
     when(clanService.getClanByTag(anyString())).thenReturn(CompletableFuture.completedFuture(Optional.of(testClan)));
     when(countryFlagService.loadCountryFlag("US")).thenReturn(Optional.of(mock(Image.class)));
     when(playerService.isOnline(anyInt())).thenReturn(false);
@@ -294,18 +304,20 @@ public class ChatChannelUserItemControllerTest extends AbstractPlainJavaFxTest {
   }
 
   @Test
-  public void testContactClanLeaderShowingSameClan() {
+  public void testContactClanLeaderShowingForSameClan() {
     Player player = PlayerBuilder.create("junit")
+      .id(1431)
       .defaultValues()
-      .clan("e")
+      .clan(testClan.getTag())
       .get();
-    Player otherClanLeader = PlayerBuilder.create("test_player")
-      .id(2)
-      .defaultValues()
-      .clan("e")
-      .get();
-    instance.setChatUser(ChatChannelUserBuilder.create("junit").defaultValues().setPlayer(player).get());
-    when(playerService.getCurrentPlayer()).thenReturn(Optional.of(otherClanLeader));
+
+    instance.setChatUser(
+      ChatChannelUserBuilder.create(clanLeader.getDisplayName())
+        .defaultValues()
+        .setPlayer(clanLeader).get()
+    );
+    when(playerService.isOnline(testClan.getLeader().getId())).thenReturn(true);
+    when(playerService.getCurrentPlayer()).thenReturn(Optional.of(player));
     WaitForAsyncUtils.waitForFxEvents();
 
     ObservableList<MenuItem> items = instance.clanMenu.getItems();
@@ -315,17 +327,20 @@ public class ChatChannelUserItemControllerTest extends AbstractPlainJavaFxTest {
   }
 
   @Test
-  public void testContactClanLeaderShowingOtherClan() {
+  public void testContactClanLeaderShowingForOtherClan() {
     Player player = PlayerBuilder.create("junit")
+      .id(1431)
       .defaultValues()
-      .clan("e")
+      .clan("xyz")
       .get();
-    Player otherClanLeader = PlayerBuilder.create("test_player")
-      .defaultValues()
-      .clan("not")
-      .get();
-    instance.setChatUser(ChatChannelUserBuilder.create("junit").defaultValues().setPlayer(player).get());
-    when(playerService.getCurrentPlayer()).thenReturn(Optional.of(otherClanLeader));
+
+    instance.setChatUser(
+      ChatChannelUserBuilder.create(clanLeader.getDisplayName())
+        .defaultValues()
+        .setPlayer(clanLeader).get()
+    );
+    when(playerService.isOnline(clanLeader.getId())).thenReturn(true);
+    when(playerService.getCurrentPlayer()).thenReturn(Optional.of(player));
     WaitForAsyncUtils.waitForFxEvents();
 
     ObservableList<MenuItem> items = instance.clanMenu.getItems();

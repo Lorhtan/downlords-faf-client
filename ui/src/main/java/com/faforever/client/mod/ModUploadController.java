@@ -24,7 +24,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import org.supcomhub.api.dto.ApiException;
 
 import java.lang.invoke.MethodHandles;
 import java.nio.file.Path;
@@ -142,7 +141,7 @@ public class ModUploadController implements Controller<Node> {
 
   private void onUploadFailed(Throwable throwable) {
     enterModInfoState();
-    if (throwable instanceof ApiException) {
+    if (throwable instanceof ModUploadFailedException) {
       notificationService.addNotification(new ImmediateNotification(
         i18n.get("errorTitle"), i18n.get("modVault.upload.failed", throwable.getLocalizedMessage()), Severity.ERROR,
         asList(

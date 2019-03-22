@@ -3,9 +3,16 @@
     <module name="ui_main" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="com.faforever.client.FafClientApplication" />
     <option name="ACTIVE_PROFILES" value="prod" />
-    <option name="VM_PARAMETERS" value="-DnativeDir=build/resources/native -Dprism.dirtyopts=false -Xms128m -Xmx512m -XX:MinHeapFreeRatio=15 -XX:MaxHeapFreeRatio=33 -XX:+HeapDumpOnOutOfMemoryError -XX:+UseStringDeduplication -javaagent:webview-patch/build/libs/webview-patch.jar" />
+    <option name="VM_PARAMETERS" value="-DnativeDir=build/resources/native -Dprism.dirtyopts=false -Xms128m -Xmx512m -XX:MinHeapFreeRatio=15 -XX:MaxHeapFreeRatio=33 -XX:+HeapDumpOnOutOfMemoryError -XX:+UseStringDeduplication -javaagent:webview-patch/build/libs/webview-patch.jar --add-exports javafx.graphics/com.sun.javafx.application=ALL-UNNAMED --add-exports javafx.graphics/com.sun.glass.utils=ALL-UNNAMED --add-exports javafx.graphics/com.sun.javafx.tk=ALL-UNNAMED --add-exports javafx.graphics/com.sun.javafx.scene.text=ALL-UNNAMED --add-exports javafx.graphics/com.sun.javafx.util=ALL-UNNAMED --add-exports javafx.base/com.sun.javafx.reflect=ALL-UNNAMED --add-exports javafx.base/com.sun.javafx.beans=ALL-UNNAMED --add-exports javafx.graphics/com.sun.javafx.scene.layout=ALL-UNNAMED --add-exports javafx.base/com.sun.javafx.event=ALL-UNNAMED --add-exports javafx.base/com.sun.javafx.collections=ALL-UNNAMED --add-exports javafx.graphics/com.sun.javafx.scene.traversal=ALL-UNNAMED --add-exports javafx.graphics/com.sun.javafx.scene=ALL-UNNAMED --add-exports javafx.base/com.sun.javafx.binding=ALL-UNNAMED --add-exports javafx.graphics/com.sun.javafx.stage=ALL-UNNAMED --add-exports javafx.base/com.sun.javafx.logging=ALL-UNNAMED --add-exports javafx.graphics/com.sun.javafx.geom=ALL-UNNAMED --add-exports javafx.base/com.sun.javafx=ALL-UNNAMED --add-exports javafx.graphics/com.sun.javafx.scene.input=ALL-UNNAMED --add-exports javafx.graphics/com.sun.glass.ui=ALL-UNNAMED --add-exports javafx.graphics/com.sun.javafx.geom.transform=ALL-UNNAMED --add-exports javafx.graphics/com.sun.prism=ALL-UNNAMED --add-exports javafx.graphics/com.sun.javafx.font=ALL-UNNAMED --add-exports javafx.graphics/com.sun.javafx.sg.prism=ALL-UNNAMED --add-exports javafx.graphics/com.sun.prism.paint=ALL-UNNAMED --add-exports javafx.graphics/com.sun.javafx.iio=ALL-UNNAMED --add-exports javafx.graphics/com.sun.javafx.text=ALL-UNNAMED" />
     <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
     <option name="ALTERNATIVE_JRE_PATH" />
+    <additionalParameters>
+      <param>
+        <option name="enabled" value="true" />
+        <option name="name" value="sh-client.use-remote-preferences" />
+        <option name="value" value="false" />
+      </param>
+    </additionalParameters>
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

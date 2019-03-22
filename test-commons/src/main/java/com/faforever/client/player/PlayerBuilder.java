@@ -1,5 +1,6 @@
 package com.faforever.client.player;
 
+
 import com.faforever.client.game.Game;
 
 public class PlayerBuilder {
@@ -16,9 +17,9 @@ public class PlayerBuilder {
 
   public PlayerBuilder defaultValues() {
     return id(1)
-        .socialStatus(SocialStatus.OTHER)
-        .clan("e")
-        .country("US");
+      .socialStatus(SocialStatus.OTHER)
+      .clan("e")
+      .country("US");
   }
 
   public PlayerBuilder clan(String clan) {

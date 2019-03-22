@@ -1,17 +1,24 @@
 package com.faforever.client.config.integration;
 
 import com.faforever.client.integration.ChannelNames;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.IntegrationMessageHeaderAccessor;
 import org.springframework.integration.annotation.IntegrationComponentScan;
 import org.springframework.integration.dsl.IntegrationFlow;
 import org.springframework.integration.dsl.IntegrationFlows;
-import org.springframework.integration.router.PayloadTypeRouter;
+import org.springframework.integration.event.outbound.ApplicationEventPublishingMessageHandler;
 
 @Configuration
 @IntegrationComponentScan("com.faforever.server.integration")
 public class IntegrationConfig {
+
+  private final ApplicationEventPublisher applicationEventPublisher;
+
+  public IntegrationConfig(ApplicationEventPublisher applicationEventPublisher) {
+    this.applicationEventPublisher = applicationEventPublisher;
+  }
 
   /**
    * Reads messages from the standard server inbound channel. Since messages are resequenced, all messages must specify
@@ -21,8 +28,6 @@ public class IntegrationConfig {
   public IntegrationFlow inboundFlow() {
     return IntegrationFlows
       .from(ChannelNames.SERVER_INBOUND)
-      // FIXME websocket messages don't have a sequence number yet
-//      .resequence(spec -> spec.releasePartialSequences(true))
       .channel(ChannelNames.INBOUND_DISPATCH)
       .get();
   }
@@ -31,7 +36,7 @@ public class IntegrationConfig {
   public IntegrationFlow dispatchFlow() {
     return IntegrationFlows
       .from(ChannelNames.INBOUND_DISPATCH)
-      .route(inboundRouter())
+      .handle(applicationEventPublishingMessageHandler())
       .get();
   }
 
@@ -46,12 +51,12 @@ public class IntegrationConfig {
       .get();
   }
 
-  /**
-   * Routes request messages to their corresponding request channel.
-   */
-  private PayloadTypeRouter inboundRouter() {
-    PayloadTypeRouter router = new PayloadTypeRouter();
-    // FIXME implement
-    return router;
+  /** Publishes inbound messages as {@link org.springframework.integration.event.core.MessagingEvent}. */
+  @Bean
+  public ApplicationEventPublishingMessageHandler applicationEventPublishingMessageHandler() {
+    ApplicationEventPublishingMessageHandler handler = new ApplicationEventPublishingMessageHandler();
+    handler.setApplicationEventPublisher(applicationEventPublisher);
+    handler.setPublishPayload(true);
+    return handler;
   }
 }

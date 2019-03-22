@@ -30,6 +30,9 @@ dependencies {
   compile("org.openjfx:javafx-web:${javafxVersion}:${javafxPlatform}")
   compile("org.openjfx:javafx-media:${javafxVersion}:${javafxPlatform}")
 
+  compile("com.google.guava:guava:${guavaVersion}")
+
+
   compile("org.mapstruct:mapstruct-jdk8:${mapstructVersion}")
   annotationProcessor("org.mapstruct:mapstruct-processor:${mapstructVersion}")
 }

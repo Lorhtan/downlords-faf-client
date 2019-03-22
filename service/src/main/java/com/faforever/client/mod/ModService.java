@@ -121,6 +121,7 @@ public class ModService implements InitializingBean, DisposableBean {
     modsDirectory = preferencesService.getPreferences().getForgedAlliance().getModsDirectory();
     JavaFxUtil.addListener(preferencesService.getPreferences().getForgedAlliance().modsDirectoryProperty(), (observable, oldValue, newValue) -> {
       if (newValue != null) {
+        modsDirectory = newValue;
         onModDirectoryReady();
       }
     });
@@ -264,7 +265,6 @@ public class ModService implements InitializingBean, DisposableBean {
   }
 
   @NotNull
-  @SneakyThrows
   public ModVersion extractModInfo(Path path) {
     Path modInfoLua = path.resolve("mod_info.lua");
     logger.debug("Reading mod {}", path);
@@ -274,6 +274,8 @@ public class ModService implements InitializingBean, DisposableBean {
 
     try (InputStream inputStream = Files.newInputStream(modInfoLua)) {
       return extractModInfo(inputStream, path);
+    } catch (Exception e) {
+      throw new ModLoadException(e);
     }
   }
 

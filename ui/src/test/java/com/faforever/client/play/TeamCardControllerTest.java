@@ -1,5 +1,6 @@
 package com.faforever.client.play;
 
+import com.faforever.client.game.KnownFeaturedMod;
 import com.faforever.client.i18n.I18n;
 import com.faforever.client.play.PlayerCardTooltipController;
 import com.faforever.client.play.TeamCardController;
@@ -26,9 +27,9 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TeamCardControllerTest extends AbstractPlainJavaFxTest {
+  private static final String LEADERBOARD_NAME = KnownFeaturedMod.LADDER_1V1.getTechnicalName();
   private TeamCardController instance;
-  @Mock
-  private Player player;
+
   @Mock
   private I18n i18n;
   @Mock
@@ -44,12 +45,15 @@ public class TeamCardControllerTest extends AbstractPlainJavaFxTest {
   public void setUp() throws IOException {
     instance = new TeamCardController(uiService, i18n);
     playerList = new ArrayList<>();
+    Player player = new Player();
+    player.setId(1);
+    player.getRating().put(LEADERBOARD_NAME, 1);
+
     playerList.add(player);
     teams = FXCollections.observableHashMap();
 
     when(uiService.loadFxml("theme/player_card_tooltip.fxml")).thenReturn(playerCardTooltipController);
     when(playerCardTooltipController.getRoot()).thenReturn(new Label());
-    when(player.getId()).thenReturn(1);
 
     playerStats = new PlayerStats(1, 5, 5);
     teams.put("2", Collections.singletonList(playerStats));
@@ -59,8 +63,8 @@ public class TeamCardControllerTest extends AbstractPlainJavaFxTest {
 
   @Test
   public void setPlayersInTeam() throws Exception {
-    instance.setPlayersInTeam(2, playerList, "ladder1v1");
-    verify(i18n).get("game.tooltip.teamTitle", 1, 1000);
+    instance.setPlayersInTeam(2, playerList, LEADERBOARD_NAME);
+    verify(i18n).get("game.tooltip.teamTitle", 1, 1);
   }
 
 }

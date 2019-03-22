@@ -2,6 +2,7 @@ package com.faforever.client.play;
 
 import com.faforever.client.game.Game;
 import com.faforever.client.game.GameService;
+import com.faforever.client.game.KnownFeaturedMod;
 import com.faforever.client.i18n.I18n;
 import com.faforever.client.notification.ImmediateNotification;
 import com.faforever.client.notification.NotificationService;
@@ -50,32 +51,34 @@ public class JoinGameHelperTest extends AbstractPlainJavaFxTest {
   @Mock
   private ReportingService reportingService;
   @Mock
-  private Game game;
-  @Mock
   private UiService uiService;
   @Mock
   private EventBus eventBus;
+  private Game game;
+  private Player player;
 
   @Before
   public void setUp() throws Exception {
     instance = new JoinGameHelper(i18n, playerService, gameService, preferencesService, notificationService, reportingService, uiService, eventBus);
 
-    Player player = new Player("junit");
-    player.getRating().put("global", 10);
+    player = new Player("junit");
+    player.getRating().put(KnownFeaturedMod.DEFAULT.getTechnicalName(), 5);
     when(playerService.getCurrentPlayer()).thenReturn(Optional.of(player));
 
-    when(game.getMinRank()).thenReturn(0);
-    when(game.getMaxRank()).thenReturn(1000);
+    game = new Game();
+    game.setMinRank(3);
+    game.setMaxRank(8);
+    game.setLeaderboardName(KnownFeaturedMod.DEFAULT.getTechnicalName());
+
     when(uiService.loadFxml("theme/enter_password.fxml")).thenReturn(enterPasswordController);
-
     when(gameService.joinGame(any(), any())).thenReturn(new CompletableFuture<>());
-
     when(preferencesService.isGamePathValid()).thenReturn(true);
   }
 
 
   /**
-   * Ensure that a normal preferences is joined -> preferences path is set -> no password protection -> no rating notification
+   * Ensure that a normal preferences is joined -> preferences path is set -> no password protection -> no rating
+   * notification
    */
   @Test
   public void testJoinGameSuccess() throws Exception {
@@ -131,7 +134,7 @@ public class JoinGameHelperTest extends AbstractPlainJavaFxTest {
    */
   @Test
   public void testJoinGamePasswordProtected() throws Exception {
-    when(game.getPasswordProtected()).thenReturn(true);
+    game.setPasswordProtected(true);
     instance.join(game);
     verify(enterPasswordController).showPasswordDialog(getRoot().getScene().getWindow());
   }
@@ -144,17 +147,14 @@ public class JoinGameHelperTest extends AbstractPlainJavaFxTest {
     instance.join(game, "haha", true);
     verify(gameService).joinGame(game, "haha");
     verify(notificationService, never()).addNotification(any(ImmediateNotification.class));
-
-    verify(game, never()).getMinRank();
-    verify(game, never()).getMaxRank();
   }
 
   /**
    * Ensure that the user is notified about his rating being to low
    */
   @Test
-  public void testJoinGameRatingToLow() throws Exception {
-    when(game.getMinRank()).thenReturn(5000);
+  public void testJoinGameRatingTooLow() throws Exception {
+    game.setMinRank(player.getRating().get(KnownFeaturedMod.DEFAULT.getTechnicalName()) + 1);
     instance.join(game);
     verify(notificationService).addNotification(any(ImmediateNotification.class));
   }
@@ -163,8 +163,8 @@ public class JoinGameHelperTest extends AbstractPlainJavaFxTest {
    * Ensure that the user is notified about his rating being to high
    */
   @Test
-  public void testJoinGameRatingToHigh() throws Exception {
-    when(game.getMaxRank()).thenReturn(100);
+  public void testJoinGameRatingTooHigh() throws Exception {
+    game.setMaxRank(player.getRating().get(KnownFeaturedMod.DEFAULT.getTechnicalName()) - 1);
     instance.join(game);
     verify(notificationService).addNotification(any(ImmediateNotification.class));
   }

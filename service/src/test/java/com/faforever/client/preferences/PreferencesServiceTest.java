@@ -6,7 +6,9 @@ import com.sun.jna.platform.win32.Shell32Util;
 import com.sun.jna.platform.win32.ShlObj;
 import org.bridj.Platform;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 import org.mockito.Mock;
 
 import java.nio.file.Path;
@@ -18,6 +20,9 @@ import static org.junit.Assert.assertThat;
 
 public class PreferencesServiceTest {
 
+  @Rule
+  private TemporaryFolder temporaryFolder = new TemporaryFolder();
+
   @Mock
   private PreferencesService instance;
   @Mock
@@ -27,12 +32,12 @@ public class PreferencesServiceTest {
 
   @Before
   public void setUp() throws Exception {
-    instance = new PreferencesService(clientProperties);
+    instance = new PreferencesService(clientProperties, temporaryFolder.getRoot().toPath().resolve("client.prefs"));
   }
 
   @Test
   public void testGetPreferencesDirectory() throws Exception {
-    assertThat(instance.getPreferencesDirectory(), notNullValue());
+    assertThat(PreferencesService.getPreferencesDirectory(), notNullValue());
   }
 
   @Test

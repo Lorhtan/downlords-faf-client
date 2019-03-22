@@ -4,7 +4,6 @@ import com.faforever.client.game.Game;
 import javafx.scene.Node;
 import lombok.Getter;
 
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.Locale;
 
@@ -26,6 +25,6 @@ public enum TilesSortingOrder {
   }
 
   private static int playersInGame(Game game) {
-    return (int) game.getTeams().values().stream().flatMap(Collection::stream).count();
+    return game.getNumPlayers();
   }
 }

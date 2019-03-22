@@ -6,7 +6,10 @@ apply plugin: 'io.spring.dependency-management'
 apply plugin: 'org.springframework.boot'
 
 dependencies {
+  implementation("org.springframework.boot:spring-boot-starter")
+
   compile("com.jfoenix:jfoenix:${jfoenixVersion}")
+//  implementation 'com.github.jfoenixadmin:JFoenix:JFoenix-9.0.0-SNAPSHOT'
   compile("com.github.micheljung:FX-BorderlessScene:3.5.0")
   compile project(":service")
 

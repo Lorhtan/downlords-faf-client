@@ -39,7 +39,6 @@ public class ReviewsControllerTest extends AbstractPlainJavaFxTest {
     instance = new ReviewsController(i18n, uiService, playerService);
 
     when(reviewController.getRoot()).thenReturn(new Pane());
-    when(playerService.getCurrentPlayer()).thenReturn(Optional.of(new Player("junit")));
 
     loadFxml("theme/vault/review/reviews.fxml", param -> {
       if (param == ReviewController.class) {

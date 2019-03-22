@@ -8,6 +8,7 @@ import com.faforever.client.preferences.Preferences;
 import com.faforever.client.preferences.PreferencesService;
 import com.faforever.client.test.AbstractPlainJavaFxTest;
 import com.faforever.client.theme.UiService;
+import com.faforever.client.vault.map.MapPreviewTableCellController;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.scene.control.TableColumn;
@@ -22,6 +23,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 public class GamesTableControllerTest extends AbstractPlainJavaFxTest {
@@ -37,11 +39,16 @@ public class GamesTableControllerTest extends AbstractPlainJavaFxTest {
   private MapPreviewService mapPreviewService;
   @Mock
   private PreferencesService preferencesService;
+  @Mock
+  private MapPreviewTableCellController mapPreviewTableCellController;
 
   @Before
   public void setUp() throws Exception {
     instance = new GamesTableController(mapPreviewService, joinGameHelper, i18n, uiService, preferencesService);
     when(preferencesService.getPreferences()).thenReturn(new Preferences());
+    when(i18n.get(anyString())).thenReturn("");
+    when(uiService.loadFxml("theme/vault/map/map_preview_table_cell.fxml"))
+      .thenReturn(mapPreviewTableCellController);
 
     loadFxml("theme/play/games_table.fxml", param -> instance);
 
@@ -90,7 +97,8 @@ public class GamesTableControllerTest extends AbstractPlainJavaFxTest {
 
     TableColumn<Game, ?> column = instance.gamesTable.getColumns().get(0);
     column.setSortType(SortType.ASCENDING);
-    instance.gamesTable.getSortOrder().add(column);
+    WaitForAsyncUtils.asyncFx(() -> instance.gamesTable.getSortOrder().add(column));
+    WaitForAsyncUtils.waitForFxEvents();
 
     assertThat(preferencesService.getPreferences().getGameListSorting(), hasSize(1));
     assertThat(

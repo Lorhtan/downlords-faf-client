@@ -38,7 +38,7 @@ public interface V2ClientMessageMapper {
 
   SelectAvatarClientMessage map(com.faforever.client.avatar.SelectAvatarClientMessage message);
 
-  @Mapping(source = "featuredMod.id", target = "modId")
+  @Mapping(source = "featuredMod.id", target = "mod")
   @Mapping(source = "mapName", target = "map")
   @Mapping(source = "gameVisibility", target = "visibility")
   HostGameClientMessage map(HostGameRequest message);

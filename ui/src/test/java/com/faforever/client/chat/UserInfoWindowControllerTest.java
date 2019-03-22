@@ -74,16 +74,16 @@ public class UserInfoWindowControllerTest extends AbstractPlainJavaFxTest {
   @Before
   public void setUp() throws Exception {
     instance = new UserInfoWindowController(statisticsService, countryFlagService, achievementService, achievementImageService, eventService,
-        i18n, uiService, timeService,
-        notificationService, playerService, leaderboardService);
+      i18n, uiService, timeService,
+      notificationService, playerService, leaderboardService);
 
     when(uiService.loadFxml("theme/achievement_item.fxml")).thenReturn(achievementItemController);
     when(achievementItemController.getRoot()).thenReturn(new HBox());
     when(playerService.getPlayersByIds(any())).thenReturn(CompletableFuture.completedFuture(Collections.emptyList()));
 
     when(statisticsService.getRatingHistory(any(), eq(PLAYER_ID))).thenReturn(CompletableFuture.completedFuture(Arrays.asList(
-        new RatingHistoryDataPoint(OffsetDateTime.now(), 5),
-        new RatingHistoryDataPoint(OffsetDateTime.now().plus(1, ChronoUnit.DAYS), 5)
+      new RatingHistoryDataPoint(OffsetDateTime.now(), 5),
+      new RatingHistoryDataPoint(OffsetDateTime.now().plus(1, ChronoUnit.DAYS), 5)
     )));
 
     loadFxml("theme/user_info_window.fxml", clazz -> instance);
@@ -91,17 +91,26 @@ public class UserInfoWindowControllerTest extends AbstractPlainJavaFxTest {
 
   @Test
   public void testSetPlayerInfoBeanNoAchievementUnlocked() throws Exception {
+    Achievement achievement = new Achievement();
+    achievement.setId("123");
     when(achievementService.getAchievements()).thenReturn(CompletableFuture.completedFuture(singletonList(
-        new Achievement()
+      achievement
     )));
     when(uiService.loadFxml("theme/achievement_item.fxml")).thenReturn(achievementItemController);
+
+    PlayerAchievement playerAchievement = new PlayerAchievement();
+    playerAchievement.setAchievement(achievement);
+    playerAchievement.setState(AchievementState.REVEALED);
     when(achievementService.getPlayerAchievements(PLAYER_ID)).thenReturn(CompletableFuture.completedFuture(
-        singletonList(new PlayerAchievement())
+      singletonList(playerAchievement)
     ));
+
     when(eventService.getPlayerEvents(PLAYER_ID)).thenReturn(CompletableFuture.completedFuture(new HashMap<>()));
 
     Player player = new Player(PLAYER_NAME);
     player.setId(PLAYER_ID);
+    player.getRating().put("global", 5);
+    player.getRating().put("ladder1v1", 4);
     instance.setPlayer(player);
 
     verify(achievementService).getAchievements();
@@ -125,8 +134,8 @@ public class UserInfoWindowControllerTest extends AbstractPlainJavaFxTest {
     Achievement achievement2 = new Achievement();
 
     when(achievementService.getAchievements()).thenReturn(CompletableFuture.completedFuture(asList(
-        achievement1,
-        achievement2
+      achievement1,
+      achievement2
     )));
     when(uiService.loadFxml("theme/achievement_item.fxml")).thenReturn(achievementItemController);
 
@@ -137,13 +146,15 @@ public class UserInfoWindowControllerTest extends AbstractPlainJavaFxTest {
     PlayerAchievement playerAchievement2 = new PlayerAchievement();
 
     when(achievementService.getPlayerAchievements(PLAYER_ID)).thenReturn(CompletableFuture.completedFuture(asList(
-        playerAchievement1,
-        playerAchievement2
+      playerAchievement1,
+      playerAchievement2
     )));
     when(eventService.getPlayerEvents(PLAYER_ID)).thenReturn(CompletableFuture.completedFuture(new HashMap<>()));
 
     Player player = new Player(PLAYER_NAME);
     player.setId(PLAYER_ID);
+    player.getRating().put("global", 5);
+    player.getRating().put("ladder1v1", 4);
 
     instance.setPlayer(player);
 

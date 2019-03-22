@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import org.supcomhub.api.dto.ApiException;
 
 import java.io.BufferedOutputStream;
 import java.lang.invoke.MethodHandles;
@@ -67,19 +68,27 @@ public class ModUploadTask extends CompletableTask<Void> {
 
       try (ZipOutputStream zipOutputStream = new ZipOutputStream(new BufferedOutputStream(newOutputStream(tmpFile)))) {
         Zipper.of(modPath)
-            .to(zipOutputStream)
-            .listener(byteListener)
-            .zip();
+          .to(zipOutputStream)
+          .listener(byteListener)
+          .zip();
       }
 
       logger.debug("Uploading mod {} as {}", modPath, tmpFile);
       updateTitle(i18n.get("modVault.upload.uploading"));
 
-      fafService.uploadMod(tmpFile, byteListener);
+      uploadMod(tmpFile, byteListener);
       return null;
     } finally {
       Files.delete(tmpFile);
       ResourceLocks.freeUploadLock();
+    }
+  }
+
+  private void uploadMod(Path tmpFile, ByteCountListener byteListener) {
+    try {
+      fafService.uploadMod(tmpFile, byteListener);
+    } catch (ApiException e) {
+      throw new ModUploadFailedException(e);
     }
   }
 

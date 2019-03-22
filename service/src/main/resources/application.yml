@@ -1,13 +1,13 @@
-faf-client:
+sh-client:
   vault:
-   mapDownloadUrlFormat: ${faf-client.vault.base-url}/faf/vault/maps/%s.zip
-   mapPreviewUrlFormat: ${faf-client.vault.base-url}/faf/vault/map_previews/%s/%s.png
-   replayDownloadUrlFormat: ${faf-client.vault.base-url}/faf/vault/replay_vault/replay.php?id=%s
-   modDownloadUrlFormat: ${faf-client.vault.base-url}/faf/vault/maps/%s.zip
+   mapDownloadUrlFormat: ${sh-client.vault.base-url}/faf/vault/maps/%s.zip
+   mapPreviewUrlFormat: ${sh-client.vault.base-url}/faf/vault/map_previews/%s/%s.png
+   replayDownloadUrlFormat: ${sh-client.vault.base-url}/faf/vault/replay_vault/replay.php?id=%s
+   modDownloadUrlFormat: ${sh-client.vault.base-url}/faf/vault/maps/%s.zip
 
   website:
-      forgot-password-url: ${faf-client.website.base-url}/account/password/reset
-      create-account-url: ${faf-client.website.base-url}/account/register
+      forgot-password-url: ${sh-client.website.base-url}/account/password/reset
+      create-account-url: ${sh-client.website.base-url}/account/register
 
   imgur:
     upload:

@@ -10,7 +10,8 @@ import lombok.Setter;
 import java.util.Map;
 
 /**
- * Message sent from the server to the client containing details about the logged in account.
+ * Message sent from the server to the client containing details about the logged in account. This message is sent by
+ * the server after successful login.
  */
 @Data
 @AllArgsConstructor

@@ -7,7 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import java.time.Duration;
 
 @Data
-@ConfigurationProperties(prefix = "faf-client", ignoreUnknownFields = false)
+@ConfigurationProperties(prefix = "sh-client", ignoreUnknownFields = false)
 @JsonIgnoreProperties("trueSkill")
 public class ClientProperties {
 
@@ -64,8 +64,7 @@ public class ClientProperties {
 
   @Data
   public static class Server {
-    private String host;
-    private int port = 8001;
+    private String webSocketUrl;
   }
 
   @Data

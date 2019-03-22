@@ -58,7 +58,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionStage;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -511,12 +511,12 @@ public class FafService {
     ));
   }
 
-  public CompletionStage<List<Review>> findNonEmptyModReviews(String id, int count, int page) {
+  public CompletableFuture<List<Review>> findNonEmptyModReviews(String id, int count, int page) {
     return CompletableFuture.completedFuture(fafApiAccessor.findNonEmptyModReviews(id, count, page).stream()
       .map(apiDtoMapper::map).collect(toList()));
   }
 
-  public CompletionStage<Optional<ReviewsSummary>> findModReviewsSummary(String id) {
+  public CompletableFuture<Optional<ReviewsSummary>> findModReviewsSummary(String id) {
     return CompletableFuture.completedFuture(Optional.ofNullable(
       apiDtoMapper.map(fafApiAccessor.findModReviewSummary(id))
     ));

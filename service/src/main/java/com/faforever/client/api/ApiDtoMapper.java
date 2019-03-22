@@ -38,6 +38,8 @@ import org.supcomhub.api.dto.ModReviewSummary;
 import org.supcomhub.api.dto.ModVersionReview;
 import org.supcomhub.api.dto.ReviewScoreCount;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -183,5 +185,17 @@ public interface ApiDtoMapper {
   default ObservableMap<Byte, Integer> map(List<ReviewScoreCount> reviewScoreCounts) {
     return FXCollections.observableMap(reviewScoreCounts.stream()
       .collect(Collectors.toMap(ReviewScoreCount::getScore, ReviewScoreCount::getCount)));
+  }
+
+  default URL map(String url) {
+    try {
+      return new URL(url);
+    } catch (MalformedURLException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  default String map(URL url) {
+    return url.toExternalForm();
   }
 }

@@ -34,6 +34,7 @@ public class GamesTilesContainerController implements Controller<Node> {
 
   private final UiService uiService;
   private final ListChangeListener<Game> gameListChangeListener;
+  private final WeakListChangeListener<Game> weakGameListChangeListener;
   private final PreferencesService preferencesService;
   private final ChangeListener<? super TilesSortingOrder> sortingListener;
   public FlowPane tiledFlowPane;
@@ -68,6 +69,7 @@ public class GamesTilesContainerController implements Controller<Node> {
         sortNodes();
       }
     });
+    weakGameListChangeListener = new WeakListChangeListener<>(gameListChangeListener);
   }
 
   private void sortNodes() {
@@ -88,7 +90,8 @@ public class GamesTilesContainerController implements Controller<Node> {
     initializeChoiceBox(choseSortingTypeChoiceBox);
     uidToGameCard = new HashMap<>();
     games.forEach(this::addGameCard);
-    JavaFxUtil.addListener(games, new WeakListChangeListener<>(gameListChangeListener));
+    games.removeListener(weakGameListChangeListener);
+    JavaFxUtil.addListener(games, weakGameListChangeListener);
     selectFirstGame();
     sortNodes();
   }

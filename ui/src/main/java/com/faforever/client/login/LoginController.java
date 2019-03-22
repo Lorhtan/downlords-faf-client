@@ -31,8 +31,6 @@ import org.springframework.stereotype.Component;
 import java.lang.invoke.MethodHandles;
 import java.util.concurrent.CancellationException;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
-
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Slf4j
@@ -84,8 +82,8 @@ public class LoginController implements Controller<Node> {
     serverConfigPane.setVisible(false);
 
     populateEndpointFields(
-        clientProperties.getServer().getHost(),
-        clientProperties.getServer().getPort(),
+        "FIXME",
+        1111,
         clientProperties.getReplay().getRemoteHost(),
         clientProperties.getReplay().getRemotePort(),
         clientProperties.getApi().getBaseUrl()
@@ -186,8 +184,9 @@ public class LoginController implements Controller<Node> {
     boolean autoLogin = autoLoginCheckBox.isSelected();
 
     Server server = clientProperties.getServer();
-    server.setHost(serverHostField.getText());
-    server.setPort(Integer.parseInt(serverPortField.getText()));
+    // FIXME
+//    server.setHost(serverHostField.getText());
+//    server.setPort(Integer.parseInt(serverPortField.getText()));
 
     Replay replay = clientProperties.getReplay();
     replay.setRemoteHost(replayServerHostField.getText());

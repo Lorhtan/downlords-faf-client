@@ -1,6 +1,6 @@
-faf-client:
+sh-client:
   server:
-    host: lobby.test.faforever.com
+    web-socket-url: wss://server.test.supcomhub.org/ws
 
   irc:
     host: irc.test.faforever.com
@@ -18,7 +18,7 @@ faf-client:
     base-url: https://www.test.faforever.com
 
   api:
-    base-url: http://api.test.faforever.com
+    base-url: https://api.test.supcomhub.org
     client-id: 3bc8282c-7730-11e5-8bcf-feff819cdc9f
     client-secret: 6035bd78-7730-11e5-8bcf-feff819cdc9f
 

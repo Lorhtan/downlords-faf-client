@@ -15,8 +15,10 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import org.supcomhub.api.dto.ApiException;
 
 import java.io.BufferedOutputStream;
+import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -74,19 +76,27 @@ public class MapUploadTask extends CompletableTask<Void> implements Initializing
 
       try (ZipOutputStream zipOutputStream = new ZipOutputStream(new BufferedOutputStream(newOutputStream(tmpFile)))) {
         Zipper.of(mapPath)
-            .to(zipOutputStream)
-            .listener(byteListener)
-            .zip();
+          .to(zipOutputStream)
+          .listener(byteListener)
+          .zip();
       }
 
       logger.debug("Uploading map {} as {}", mapPath, tmpFile);
       updateTitle(i18n.get("mapVault.upload.uploading"));
 
-      fafApiAccessor.uploadMap(tmpFile, isRanked, byteListener);
+      uploadMap(tmpFile, byteListener);
       return null;
     } finally {
       Files.delete(tmpFile);
       ResourceLocks.freeUploadLock();
+    }
+  }
+
+  private void uploadMap(Path tmpFile, ByteCountListener byteListener) throws IOException {
+    try {
+      fafApiAccessor.uploadMap(tmpFile, isRanked, byteListener);
+    } catch (ApiException e) {
+      throw new MapUploadFailedException(e);
     }
   }
 

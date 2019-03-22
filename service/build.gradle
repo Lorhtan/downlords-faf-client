@@ -6,24 +6,26 @@ apply plugin: 'io.spring.dependency-management'
 apply plugin: 'org.springframework.boot'
 
 dependencies {
-  compile("org.springframework.boot:spring-boot-starter")
-  compile("org.springframework.boot:spring-boot-starter-cache")
-  compile("org.springframework.boot:spring-boot-starter-logging")
-  compile("org.springframework.boot:spring-boot-starter-websocket")
-  compile("org.springframework.boot:spring-boot-starter-integration")
-  compile("org.springframework.integration:spring-integration-ip")
-  compile("org.springframework.integration:spring-integration-websocket")
-  compile("org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:${springSecurityOauth2AutoconfigureVersion}")
-  compile("org.springframework:spring-web")
+  implementation("org.springframework.boot:spring-boot-starter")
+  implementation("org.springframework.boot:spring-boot-starter-cache")
+  implementation("org.springframework.boot:spring-boot-starter-logging")
+  implementation("org.springframework.boot:spring-boot-starter-websocket")
+  implementation("org.springframework.boot:spring-boot-starter-integration")
+  implementation("org.springframework.integration:spring-integration-ip")
+  implementation("org.springframework.integration:spring-integration-websocket")
+  implementation("org.springframework.integration:spring-integration-event")
+  implementation("org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:${springSecurityOauth2AutoconfigureVersion}")
+  implementation("org.springframework:spring-web")
 
   compileOnly("org.springframework.boot:spring-boot-configuration-processor")
 
   compile("com.github.ben-manes.caffeine:caffeine")
-  compile("org.apache.httpcomponents:httpclient")
+  implementation("org.apache.httpcomponents:httpclient")
 
+  // TODO try to get rid of guava. At least don't use its EventBus (use Spring's instead)
   compile("com.google.guava:guava:${guavaVersion}")
   compile("com.github.FAForever:faf-java-commons:${fafCommonsVersion}")
-  compile("com.github.jasminb:jsonapi-converter:${jsonapiConverterVersion}")
+  implementation("com.github.jasminb:jsonapi-converter:${jsonapiConverterVersion}")
   compile("com.github.rutledgepaulv:q-builders:${qBuildersVersion}")
   compileOnly("com.install4j:install4j-runtime:${install4jRuntimeVersion}")
 
@@ -51,7 +53,8 @@ dependencies {
   }
   testCompile("com.natpryce.hamcrest:hamcrest-reflection:0.1-2")
 
-  // TODO remove after going public with the project
-  compile files("/home/geosearchef/sh/sh-java-api/sh-api-java-dto/build/libs/sh-api-java-dto.jar")
-  compile files("/home/geosearchef/sh/sh-java-server/sh-server-protocol-v2/build/libs/sh-server-protocol-v2-snapshot.jar")
+  // TODO this should be "implementation" but the search controller currently relies on DTOs
+  //  we aim to not leak DTOs into the UI code
+  compile 'org.supcomhub.api:sh-api-java-dto:2.2.8'
+  implementation "org.supcomhub.server:sh-server-v2p-java-dto:2.0.2"
 }

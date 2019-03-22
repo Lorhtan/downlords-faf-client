@@ -18,6 +18,7 @@ import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.google.common.annotations.VisibleForTesting;
 import com.sun.jna.platform.win32.Shell32Util;
 import com.sun.jna.platform.win32.ShlObj;
 import javafx.beans.property.BooleanProperty;
@@ -36,6 +37,7 @@ import javafx.scene.paint.Color;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
@@ -112,14 +114,21 @@ public class PreferencesService implements InitializingBean {
   private Preferences preferences;
   private TimerTask storeInBackgroundTask;
 
-  public PreferencesService(ClientProperties clientProperties) {
+  @VisibleForTesting
+  PreferencesService(ClientProperties clientProperties, Path preferencesFilePath) {
     this.clientProperties = clientProperties;
+    this.preferencesFilePath = preferencesFilePath;
+
     updateListeners = new ArrayList<>();
-    this.preferencesFilePath = getPreferencesDirectory().resolve(PREFS_FILE_NAME);
     timer = new Timer("PrefTimer", true);
     objectMapper = new ObjectMapper();
     objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
     objectMapper.registerModule(jacksonModule());
+  }
+
+  @Autowired
+  public PreferencesService(ClientProperties clientProperties) {
+    this(clientProperties, getPreferencesDirectory().resolve(PREFS_FILE_NAME));
   }
 
   private Module jacksonModule() {
@@ -152,7 +161,8 @@ public class PreferencesService implements InitializingBean {
     return module;
   }
 
-  public Path getPreferencesDirectory() {
+  @VisibleForTesting
+  static Path getPreferencesDirectory() {
     if (org.bridj.Platform.isWindows()) {
       return Paths.get(System.getenv("APPDATA")).resolve(APP_DATA_SUB_FOLDER);
     }
@@ -161,11 +171,17 @@ public class PreferencesService implements InitializingBean {
 
   public void afterPropertiesSet() throws IOException {
     if (Files.exists(preferencesFilePath)) {
-      deleteFileIfEmpty();
+      deleteFileIfEmpty(preferencesFilePath);
       if (Files.exists(preferencesFilePath)) {
-        readExistingFile(preferencesFilePath);
+        try {
+          readExistingFile(preferencesFilePath);
+        } catch (Exception e) {
+          Files.delete(preferencesFilePath);
+        }
       }
-    } else {
+    }
+
+    if (preferences == null) {
       preferences = new Preferences();
     }
 
@@ -194,9 +210,9 @@ public class PreferencesService implements InitializingBean {
   /**
    * It may happen that the file is empty when the process is forcibly killed, so remove the file if that happened.
    */
-  private void deleteFileIfEmpty() throws IOException {
-    if (Files.size(preferencesFilePath) == 0) {
-      Files.delete(preferencesFilePath);
+  private void deleteFileIfEmpty(Path file) throws IOException {
+    if (Files.size(file) == 0) {
+      Files.delete(file);
     }
   }
 

@@ -128,7 +128,7 @@ public class GamesTableController implements Controller<Node> {
 
     if (coopMissionNameProvider != null) {
       coopMissionName.setCellFactory(param -> new StringCell<>(name -> name));
-      coopMissionName.setCellValueFactory(param -> new SimpleObjectProperty<>(coopMissionNameProvider.apply(param.getValue().getMapFolderName())));
+      coopMissionName.setCellValueFactory(param -> new SimpleObjectProperty<>(coopMissionNameProvider.apply(param.getValue().getMapName())));
     }
 
 

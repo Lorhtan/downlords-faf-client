@@ -76,6 +76,8 @@ public class Ladder1V1ControllerTest extends AbstractPlainJavaFxTest {
 
     Player player = new Player(USERNAME);
     player.setId(PLAYER_ID);
+    player.getRating().put(KnownFeaturedMod.LADDER_1V1.getTechnicalName(), 1);
+
     currentPlayerProperty = new SimpleObjectProperty<>(player);
     factionList = FXCollections.observableArrayList();
     LeaderboardEntry leaderboardEntry = new LeaderboardEntry();
@@ -85,7 +87,7 @@ public class Ladder1V1ControllerTest extends AbstractPlainJavaFxTest {
     leaderboardEntry.setTotalGames(412);
     leaderboardEntry.setPlayerName(USERNAME);
 
-    when(leaderboardService.getLeaderboardStats("global")).thenReturn(CompletableFuture.completedFuture(new ArrayList<>()));
+    when(leaderboardService.getLeaderboardStats(KnownFeaturedMod.LADDER_1V1.getTechnicalName())).thenReturn(CompletableFuture.completedFuture(new ArrayList<>()));
     when(leaderboardService.getEntryForPlayer(PLAYER_ID, KnownFeaturedMod.LADDER_1V1.getTechnicalName())).thenReturn(CompletableFuture.completedFuture(leaderboardEntry));
     when(gameService.searching1v1Property()).thenReturn(searching1v1Property);
     when(preferencesService.getPreferences()).thenReturn(preferences);

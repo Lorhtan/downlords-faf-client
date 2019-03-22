@@ -2,6 +2,7 @@ package com.faforever.client.play;
 
 import com.faforever.client.game.Game;
 import com.faforever.client.game.GameService;
+import com.faforever.client.game.GameState;
 import com.faforever.client.i18n.I18n;
 import com.faforever.client.preferences.Preferences;
 import com.faforever.client.preferences.PreferencesService;
@@ -103,9 +104,16 @@ public class CustomGamesControllerTest extends AbstractPlainJavaFxTest {
   @Test
   public void testUpdateFilters() {
     Game game = new Game();
+    game.setState(GameState.OPEN);
+
     Game gameWithMod = new Game();
+    gameWithMod.setState(GameState.OPEN);
+
     Game gameWithPW = new Game();
+    gameWithPW.setState(GameState.OPEN);
+
     Game gameWithModAndPW = new Game();
+    gameWithModAndPW.setState(GameState.OPEN);
 
     ObservableMap<UUID, String> simMods = FXCollections.observableHashMap();
     simMods.put(UUID.randomUUID(), "Fake mod name");
@@ -117,9 +125,7 @@ public class CustomGamesControllerTest extends AbstractPlainJavaFxTest {
     gameWithModAndPW.setPassword("password");
     gameWithModAndPW.passwordProtectedProperty().set(true);
 
-    ObservableList<Game> games = FXCollections.observableArrayList();
     games.addAll(game, gameWithMod, gameWithPW, gameWithModAndPW);
-    instance.setFilteredList(games);
 
     instance.showModdedGamesCheckBox.setSelected(true);
     instance.showPasswordProtectedGamesCheckBox.setSelected(true);

@@ -6,6 +6,7 @@ import com.faforever.client.i18n.I18n;
 import com.faforever.client.map.FaMap;
 import com.faforever.client.map.MapPreviewService;
 import com.faforever.client.map.MapService;
+import com.faforever.client.map.MapSize;
 import com.faforever.client.mod.FeaturedMod;
 import com.faforever.client.mod.ModService;
 import com.faforever.client.mod.ModVersion;
@@ -111,20 +112,26 @@ public class CreateGameControllerTest extends AbstractPlainJavaFxTest {
   @Test
   public void testMapSearchTextFieldFilteringPopulated() {
     FaMap map1 = new FaMap();
+    map1.setSize(MapSize.valueOf(1, 1));
+    map1.setFolderName("test1");
     map1.setDisplayName("Test1");
 
     FaMap map2 = new FaMap();
+    map2.setSize(MapSize.valueOf(1, 1));
     map2.setFolderName("test2");
+    map2.setDisplayName("Test2");
 
     FaMap map3 = new FaMap();
-    map3.setDisplayName("foo");
+    map3.setSize(MapSize.valueOf(1, 1));
+    map3.setFolderName("foo");
+    map3.setDisplayName("Foo");
 
     mapList.addAll(map1, map2, map3);
 
     instance.mapSearchTextField.setText("Test");
 
-    assertThat(instance.filteredFaMaps.get(0).getFolderName(), is("test2"));
-    assertThat(instance.filteredFaMaps.get(1).getDisplayName(), is("Test1"));
+    assertThat(instance.filteredFaMaps.get(0).getFolderName(), is("test1"));
+    assertThat(instance.filteredFaMaps.get(1).getDisplayName(), is("Test2"));
   }
 
   @Test
@@ -272,6 +279,7 @@ public class CreateGameControllerTest extends AbstractPlainJavaFxTest {
   @Test
   public void testInitGameTypeComboBoxPostPopulated() {
     FeaturedMod featuredMod = new FeaturedMod();
+    featuredMod.setVisible(true);
     when(modService.getFeaturedMods()).thenReturn(completedFuture(singletonList(featuredMod)));
 
     WaitForAsyncUtils.asyncFx(() -> instance.initialize());
@@ -285,26 +293,30 @@ public class CreateGameControllerTest extends AbstractPlainJavaFxTest {
   public void testSelectLastOrDefaultSelectDefault() {
     FeaturedMod featuredMod = new FeaturedMod();
     featuredMod.setTechnicalName("something");
+    featuredMod.setVisible(true);
 
-    FeaturedMod featuredMod2 = new FeaturedMod();
-    featuredMod2.setTechnicalName(KnownFeaturedMod.DEFAULT.getTechnicalName());
+    FeaturedMod defaultMod = new FeaturedMod();
+    defaultMod.setTechnicalName(KnownFeaturedMod.DEFAULT.getTechnicalName());
+    defaultMod.setVisible(true);
 
     preferences.setLastGameType(null);
-    when(modService.getFeaturedMods()).thenReturn(completedFuture(asList(featuredMod, featuredMod2)));
+    when(modService.getFeaturedMods()).thenReturn(completedFuture(asList(featuredMod, defaultMod)));
 
     WaitForAsyncUtils.asyncFx(() -> instance.initialize());
     WaitForAsyncUtils.waitForFxEvents();
 
-    assertThat(instance.featuredModListView.getSelectionModel().getSelectedItem(), is(featuredMod2));
+    assertThat(instance.featuredModListView.getSelectionModel().getSelectedItem(), is(defaultMod));
   }
 
   @Test
   public void testSelectLastOrDefaultSelectLast() {
     FeaturedMod featuredMod = new FeaturedMod();
     featuredMod.setTechnicalName("last");
+    featuredMod.setVisible(true);
 
     FeaturedMod featuredMod2 = new FeaturedMod();
     featuredMod2.setTechnicalName(KnownFeaturedMod.DEFAULT.getTechnicalName());
+    featuredMod2.setVisible(true);
 
     preferences.setLastGameType("last");
     when(modService.getFeaturedMods()).thenReturn(completedFuture(asList(featuredMod, featuredMod2)));

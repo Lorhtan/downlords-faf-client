@@ -34,7 +34,6 @@ import com.faforever.client.ui.tray.event.UpdateApplicationBadgeEvent;
 import com.faforever.client.update.ClientUpdateService;
 import com.faforever.client.user.LoggedOutEvent;
 import com.faforever.client.user.LoginSuccessEvent;
-import com.github.nocatch.NoCatch;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
@@ -84,6 +83,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
 
+import static com.github.nocatch.NoCatch.noCatch;
 import static javafx.application.Platform.runLater;
 
 @Component
@@ -490,7 +490,7 @@ public class MainController implements Controller<Node> {
   }
 
   private AbstractViewController<?> getView(NavigationItem item) {
-    return NoCatch.noCatch(() -> viewCache.get(item, () -> uiService.loadFxml(item.getFxmlFile())));
+    return noCatch(() -> viewCache.get(item, () -> uiService.loadFxml(item.getFxmlFile())));
   }
 
   public void onRevealMapFolder() {

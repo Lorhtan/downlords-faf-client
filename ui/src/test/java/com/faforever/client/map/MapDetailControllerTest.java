@@ -5,6 +5,7 @@ import com.faforever.client.notification.NotificationService;
 import com.faforever.client.player.Player;
 import com.faforever.client.player.PlayerService;
 import com.faforever.client.reporting.ReportingService;
+import com.faforever.client.review.Review;
 import com.faforever.client.review.ReviewService;
 import com.faforever.client.test.AbstractPlainJavaFxTest;
 import com.faforever.client.util.TimeService;
@@ -26,6 +27,7 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
+import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
@@ -115,6 +117,9 @@ public class MapDetailControllerTest extends AbstractPlainJavaFxTest {
     faMap.setId("23");
     faMap.setSize(MapSize.valueOf(1, 1));
     faMap.setDownloadUrl(new URL("http://google.com"));
+
+    when(reviewService.findOwnMapReview(faMap.getId())).thenReturn(CompletableFuture.completedFuture(Optional.empty()));
+
     instance.setMap(faMap);
 
     assertThat(instance.hideRow.getPrefHeight(), not(is(0)));
@@ -134,6 +139,9 @@ public class MapDetailControllerTest extends AbstractPlainJavaFxTest {
     faMap.setId("23");
     faMap.setSize(MapSize.valueOf(1, 1));
     faMap.setDownloadUrl(new URL("http://google.com"));
+
+    when(reviewService.findOwnMapReview(faMap.getId())).thenReturn(CompletableFuture.completedFuture(Optional.empty()));
+
     instance.setMap(faMap);
 
     assertThat(instance.hideRow.getPrefHeight(), is(0.0));

@@ -42,7 +42,7 @@ public class UserButtonController implements Controller<Node> {
   @Subscribe
   public void onLoginSuccessEvent(LoginSuccessEvent event) {
     Platform.runLater(() -> {
-      userButtonRoot.setText(event.getUsername());
+      userButtonRoot.setText(event.getDisplayName());
       userImageView.setImage(IdenticonUtil.createIdenticon(event.getUserId()));
     });
   }

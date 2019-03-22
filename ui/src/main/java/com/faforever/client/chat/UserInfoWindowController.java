@@ -327,17 +327,16 @@ public class UserInfoWindowController implements Controller<Node> {
   }
 
   private void plotGamesPlayedChart() {
-    Player currentPlayer = playerService.getCurrentPlayer().orElseThrow(() -> new IllegalStateException("Player must be set"));
     // FIXME plot leaderboard dynamically
-    leaderboardService.getEntryForPlayer(currentPlayer.getId(), "ladder1v1").thenAccept(leaderboardEntryBean -> Platform.runLater(() -> {
+    leaderboardService.getEntryForPlayer(player.getId(), "ladder1v1").thenAccept(leaderboardEntryBean -> Platform.runLater(() -> {
       int ladderGamesCount = leaderboardEntryBean.getTotalGames();
-      int custonGamesCount = currentPlayer.getNumberOfGames();
+      int custonGamesCount = player.getNumberOfGames();
       Platform.runLater(() -> gamesPlayedChart.setData(FXCollections.observableArrayList(
         new PieChart.Data(i18n.get("stats.custom"), custonGamesCount),
         new PieChart.Data(i18n.get("stats.ranked1v1"), ladderGamesCount)
       )));
     })).exceptionally(throwable -> {
-      log.warn("Leaderboard entry could not be read for current player: {}", currentPlayer.getDisplayName(), throwable);
+      log.warn("Leaderboard entry could not be read for player: {}", player.getDisplayName(), throwable);
       return null;
     });
   }

@@ -2,6 +2,7 @@ package com.faforever.client.player;
 
 import com.faforever.client.chat.ChatChannelUser;
 import com.faforever.client.game.Game;
+import com.faforever.client.game.GameState;
 import com.faforever.client.game.PlayerStatus;
 import com.faforever.client.util.ProgrammingError;
 import javafx.beans.binding.Bindings;
@@ -248,17 +249,5 @@ public class Player {
 
   public ReadOnlyMapProperty<String, Integer> ratingProperty() {
     return rating;
-  }
-
-  public void updateFrom(PlayerServerMessage player) {
-    setId(player.getId());
-    setClanTag(player.getClanTag());
-    setCountry(player.getCountry());
-
-    setNumberOfGames(player.getNumberOfGames());
-    if (player.getAvatar() != null) {
-      setAvatarUrl(player.getAvatar().getUrl());
-      setAvatarTooltip(player.getAvatar().getDescription());
-    }
   }
 }

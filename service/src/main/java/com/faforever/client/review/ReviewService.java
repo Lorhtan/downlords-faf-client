@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionStage;
 
 @Service
 public class ReviewService {
@@ -44,23 +43,23 @@ public class ReviewService {
     return fafService.findNonEmptyMapReviews(id, count, page);
   }
 
-  public CompletionStage<List<Review>> findNonEmptyGameReviews(int id, int count, int page) {
+  public CompletableFuture<List<Review>> findNonEmptyGameReviews(int id, int count, int page) {
     return fafService.findNonEmptyGameReviews(id, count, page);
   }
 
-  public CompletionStage<Optional<ReviewsSummary>> findGameReviewsSummary(int id) {
+  public CompletableFuture<Optional<ReviewsSummary>> findGameReviewsSummary(int id) {
     return fafService.findGameReviewsSummary(id);
   }
 
-  public CompletionStage<Optional<Review>> findOwnMapReview(String id) {
+  public CompletableFuture<Optional<Review>> findOwnMapReview(String id) {
     return fafService.findOwnMapReview(id);
   }
 
-  public CompletionStage<List<Review>> findNonEmptyModReviews(String id, int count, int page) {
+  public CompletableFuture<List<Review>> findNonEmptyModReviews(String id, int count, int page) {
     return fafService.findNonEmptyModReviews(id, count, page);
   }
 
-  public CompletionStage<Optional<ReviewsSummary>> findModReviewsSummary(String id) {
+  public CompletableFuture<Optional<ReviewsSummary>> findModReviewsSummary(String id) {
     return fafService.findModReviewsSummary(id);
   }
 }

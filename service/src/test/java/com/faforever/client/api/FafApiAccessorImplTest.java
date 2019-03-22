@@ -171,8 +171,8 @@ public class FafApiAccessorImplTest {
   @SuppressWarnings("unchecked")
   public void testGetLeaderboard() {
     List<LeaderboardEntry> result = Arrays.asList(
-      new LeaderboardEntry().setAccount(new Account().setDisplayName("user1")),
-      new LeaderboardEntry().setAccount(new Account().setDisplayName("user2"))
+      new LeaderboardEntry().setPlayerName("user1"),
+      new LeaderboardEntry().setPlayerName("user2")
     );
 
     when(restOperations.getForObject(

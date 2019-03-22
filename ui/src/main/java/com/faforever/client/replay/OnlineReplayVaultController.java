@@ -30,7 +30,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import org.supcomhub.api.dto.Game;
 
 import java.lang.invoke.MethodHandles;
 import java.util.List;
@@ -90,7 +89,7 @@ public class OnlineReplayVaultController extends AbstractViewController<Node> {
     backButton.managedProperty().bind(backButton.visibleProperty());
     moreButton.managedProperty().bind(moreButton.visibleProperty());
 
-    searchController.setRootType(Game.class);
+    searchController.setRootType(org.supcomhub.api.dto.Game.class);
     searchController.setSearchListener(this::onSearch);
     searchController.setSearchableProperties(SearchableProperties.GAME_PROPERTIES);
     searchController.setSortConfig(preferencesService.getPreferences().getVaultPrefs().onlineReplaySortConfigProperty());
@@ -210,13 +209,13 @@ public class OnlineReplayVaultController extends AbstractViewController<Node> {
   private void refresh() {
     enterSearchingState();
     replayService.getNewestReplays(TOP_ELEMENT_COUNT, 1)
-        .thenAccept(replays -> populateReplays(replays, newestPane))
-        .thenCompose(aVoid -> replayService.getHighestRatedReplays(TOP_ELEMENT_COUNT, 1).thenAccept(modInfoBeans -> populateReplays(modInfoBeans, highestRatedPane)))
-        .thenRun(this::enterResultState)
-        .exceptionally(throwable -> {
-          logger.warn("Could not populate replays", throwable);
-          return null;
-        });
+      .thenAccept(replays -> populateReplays(replays, newestPane))
+      .thenCompose(aVoid -> replayService.getHighestRatedReplays(TOP_ELEMENT_COUNT, 1).thenAccept(modInfoBeans -> populateReplays(modInfoBeans, highestRatedPane)))
+      .thenRun(this::enterResultState)
+      .exceptionally(throwable -> {
+        logger.warn("Could not populate replays", throwable);
+        return null;
+      });
   }
 
   public void onMoreNewestButtonClicked() {
@@ -231,21 +230,21 @@ public class OnlineReplayVaultController extends AbstractViewController<Node> {
 
   public void onLoadMoreButtonClicked(ActionEvent actionEvent) {
     currentSupplier.get()
-        .thenAccept(replays -> displaySearchResult(replays, true));
+      .thenAccept(replays -> displaySearchResult(replays, true));
   }
 
   private void displayReplaysFromSupplier(Supplier<CompletableFuture<List<Replay>>> mapsSupplier) {
     currentPage = 1;
     this.currentSupplier = mapsSupplier;
     mapsSupplier.get()
-        .thenAccept(this::displaySearchResult)
-        .exceptionally(throwable -> {
-          notificationService.addNotification(new ImmediateErrorNotification(
-              i18n.get("errorTitle"), i18n.get("vault.replays.searchError"), throwable, i18n, reportingService
-          ));
-          enterResultState();
-          return null;
-        });
+      .thenAccept(this::displaySearchResult)
+      .exceptionally(throwable -> {
+        notificationService.addNotification(new ImmediateErrorNotification(
+          i18n.get("errorTitle"), i18n.get("vault.replays.searchError"), throwable, i18n, reportingService
+        ));
+        enterResultState();
+        return null;
+      });
   }
 
   private enum State {
